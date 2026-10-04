@@ -18,9 +18,19 @@ const serverSchema = z.object({
     .string()
     .min(1, "AUTH_SECRET is required — generate one with `npx auth secret`"),
   AUTH_URL: z.preprocess(
-    (value) =>
-      typeof value === "string" && value.trim() === "" ? undefined : value,
-    z.url().optional(),
+    (value) => {
+      if (typeof value !== "string") return value;
+
+      const trimmed = value.trim();
+      if (!trimmed) return undefined;
+
+      const unquoted = trimmed.replace(/^(['"])(.*)\1$/, "$2").trim();
+      return unquoted || undefined;
+    },
+    z.url({
+      error:
+        "AUTH_URL must be an absolute URL (for example, https://portal.example.com); do not include the variable name or surrounding quotes",
+    }).optional(),
   ),
 
   // Optional: the Google provider is only registered when both are present.
