@@ -447,3 +447,19 @@ routes หรือ resource/assignment/workflow guards และยังไม
 
 ผลตรวจ increment นี้: `pnpm test` 5 files / 37 tests ผ่าน, typecheck และ Prisma validate
 ผ่าน, lint ไม่มี error มี warning รูปภาพเดิม 1 รายการ ยังไม่ทดสอบ deploy migration จริง
+
+
+### 8.7 Migration และ OVEC API — 2026-10-04
+
+นำ migration `20261004000000_add_evaluation_role_assignments` ไปใช้กับ Supabase ที่ตั้งค่าไว้
+(schema `portal`) แล้ว `prisma migrate status` ยืนยันครบ 10 migrations ไม่มีค้าง
+สถานะนี้แทนข้อความก่อนหน้าที่ยังไม่ deploy; ไม่มี backfill หรือเพิ่มสิทธิ์ให้บัญชีเดิม
+
+ตามคำสั่งผู้ใช้ เพิ่ม OVEC master-data API เป็น external integration ที่อยู่ในขอบเขต:
+อ่านข้อมูลอ้างอิงสถานศึกษา ภูมิศาสตร์ และรหัสอาชีวศึกษาฝั่ง server ผ่าน `OVEC_API_URL`
+และ `OVEC_API_KEY` ห้ามส่ง key ไป client หรือ log ข้อมูลบัญชีและคะแนนยังเก็บในระบบนี้
+การมีข้อมูล standards/evaluation-issues จาก API ไม่แทนการอนุมัติเกณฑ์จาก HR
+
+ตรวจ authenticated GET catalogue และค้นวิทยาลัยแล้ว HTTP 200 พบวิทยาลัยการอาชีพลอง
+รหัส `1354036401` เพียงรายการเดียว ดู [เอกสาร integration](docs/OVEC-API.md)
+ยังไม่มี application client/UI consumers; ไม่อ้างว่าเชื่อมหน้าจอสำเร็จแล้ว

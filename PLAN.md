@@ -997,3 +997,15 @@ Committee should be able to open a teacher → enter scores → review → submi
 
 Create a polished, realistic, fully navigable web application prototype with all major screens connected through the navigation.
 
+
+
+## Deployment and reference API update — 2026-10-04
+
+Applied `20261004000000_add_evaluation_role_assignments` to the configured Supabase database
+(schema `portal`) using Prisma migrate deploy. Prisma migrate status confirms all 10 migrations
+are applied. This supersedes earlier "not applied" status notes; no role backfill was performed.
+
+The project now includes the OVEC master-data API as an authorized external reference source.
+Read-only authenticated catalogue and college-search calls returned HTTP 200; the college code
+is `1354036401`. See [OVEC integration notes](docs/OVEC-API.md) for the contract and boundaries.
+Application API client/UI integration remains pending; official scoring policy still requires HR.
