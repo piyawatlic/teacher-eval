@@ -270,3 +270,13 @@ shell. Generate the SQL with
 `prisma migrate deploy`.
 
 **Package manager:** pnpm. A `package-lock.json` exists in the tree but is not authoritative.
+
+
+### Deployment build and OVEC references
+
+Use `pnpm build` on Vercel. It explicitly runs `prisma generate` before `next build`, so cached
+installs cannot leave `lib/generated/prisma/client` missing. The generated client stays ignored;
+builds do not apply database migrations. Redeploy the commit containing this script change.
+
+Portal admins can browse OVEC college data at `/admin/reference-data`. Configure the server-only
+`OVEC_API_URL` and `OVEC_API_KEY` as described in [OVEC API notes](docs/OVEC-API.md).

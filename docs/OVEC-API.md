@@ -74,3 +74,14 @@ UI consumers, general reference pickers and further resource-specific DTOs remai
 
 Live smoke check through the implemented client also passed: `getOvecCollege("1354036401")`
 returned the expected active วิทยาลัยการอาชีพลอง record using the configured server key.
+
+
+## First UI consumer
+
+`/admin/reference-data` is a read-only Portal ADMIN reference browser linked from AdminSidebar.
+Its cached query (`lib/queries/ovec.ts`) calls `requireAdmin()` before reaching OVEC; it does not
+use legacy ADMIN to infer evaluation grants. GET form filters live in the URL, reset pagination
+on new searches, and preserve filters on next/previous links. Service failures remain distinct
+from zero matches. No raw upstream metadata or credentials are sent to the client.
+
+Production build and 69 tests pass; browser visual acceptance remains pending.

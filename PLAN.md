@@ -1018,3 +1018,19 @@ minimal response DTOs, bounded query validation, timeout, redirect rejection and
 errors. Tests cover requests, bad inputs/configuration, failures and response validation.
 `pnpm test`: 63 tests passed; typecheck passed; lint has one existing warning.
 See [client usage](docs/OVEC-API.md). API-backed UI and other resource DTOs remain pending.
+
+
+## Reference-data screen and build reliability — 2026-10-04
+
+Added `/admin/reference-data`, a read-only Portal ADMIN screen for Thai college search,
+active/inactive filtering, 20-row pagination and loading/empty/service-error states. It is
+linked from AdminSidebar. `lib/queries/ovec.ts` guards access before any upstream call;
+this legacy admin reference tool does not grant evaluation authority or alter college settings.
+
+The production build now runs `prisma generate && next build`, ensuring the ignored generated
+client exists even when Vercel reuses dependencies without running postinstall. No database
+migration is performed by the build command.
+
+Validation: production build passed including the new route; 69 tests passed; typecheck passed;
+lint has one existing image warning. Browser visual acceptance and deployed Vercel verification
+remain pending. Other OVEC resources and evaluation workflows remain future increments.

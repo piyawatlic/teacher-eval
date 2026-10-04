@@ -474,3 +474,15 @@ routes หรือ resource/assignment/workflow guards และยังไม
 
 ผลตรวจ: 7 files / 63 tests ผ่าน, typecheck ผ่าน, lint ไม่มี error มี warning เดิม 1 รายการ
 ดู [OVEC-API.md](docs/OVEC-API.md) สำหรับข้อจำกัดและวิธีใช้งาน
+
+
+### 8.9 หน้าข้อมูลสถานศึกษาและ production build — 2026-10-04
+
+เพิ่ม `/admin/reference-data` สำหรับ Portal ADMIN แบบอ่านอย่างเดียว ค้นภาษาไทย กรองสถานะ
+แบ่งหน้า 20 รายการ และแสดง loading/empty/error โดยตรวจ `requireAdmin()` ใน query ก่อนเรียก
+OVEC API ไม่เพิ่มสิทธิ์ประเมิน ไม่แก้ข้อมูล upstream หรือสถานศึกษาที่ตั้งค่าในระบบ
+
+แก้ build command เป็น `prisma generate && next build` เพื่อสร้าง client เมื่อ Vercel ใช้
+dependency cache แล้วไม่ได้รัน postinstall โดยไม่ deploy migration ระหว่าง build
+ตรวจ production build ผ่าน รวม route ใหม่; 69 tests และ typecheck ผ่าน; lint มี warning
+เดิม 1 รายการ ยังไม่ตรวจ browser visual acceptance หรือ deployment บน Vercel หลังแก้

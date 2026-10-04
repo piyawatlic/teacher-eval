@@ -16,7 +16,7 @@ import { SidebarNavLink as NavLink } from "../layout/SidebarNavLink";
 export function AdminSidebar({
   active,
 }: {
-  active: "Branding" | "Announcements" | "Email" | "Feedback";
+  active: "Branding" | "Announcements" | "Email" | "Feedback" | "Reference data";
 }) {
   const { open, setOpen } = useMobileNav();
   const close = () => setOpen(false);
@@ -46,6 +46,7 @@ export function AdminSidebar({
               <div className="flex flex-col gap-px pt-2">
                 <NavLink label="Branding" href="/admin/branding" active={active === "Branding"} onNavigate={close} />
                 <NavLink label="Announcements" href="/admin/announcements" active={active === "Announcements"} onNavigate={close} />
+                <NavLink label="ข้อมูลสถานศึกษา สอศ." href="/admin/reference-data" active={active === "Reference data"} onNavigate={close} />
                 <NavLink label="Email" href="/admin/email" active={active === "Email"} onNavigate={close} />
               </div>
             </div>
