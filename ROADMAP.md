@@ -134,6 +134,12 @@ development environment and test commands are reproducible.
 
 ### Phase 1 — Application identity, access, and navigation
 
+**Foundation started 2026-10-04:** additive evaluation-role assignments, explicit entry
+capabilities and a current-grant session guard are implemented with unit tests. Migration SQL
+is prepared but not deployed/backfilled. Legacy surfaces remain on legacy authorization;
+HR mappings, evaluation resource checks, Thai UI and full Phase 1 acceptance remain pending.
+
+
 **Outcome:** users can sign in to a coherent Thai evaluation application and see only the areas
 their role may access.
 

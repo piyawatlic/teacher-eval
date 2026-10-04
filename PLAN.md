@@ -30,6 +30,15 @@ review, update every role consumer, and retain the legacy structure through acce
 and the rollback window. See [migration design](docs/MIGRATION-PLAN.md). This is the selected
 architecture; HR authority and mapping approvals remain pending.
 
+Implementation increment — 2026-10-04
+-------------------------------------
+
+The additive multi-role schema, explicit capability module and session-based evaluation entry
+guard are now implemented in source, with unit tests. The migration has not been deployed or
+backfilled. Portal surfaces still use legacy roles; evaluation UI, scoped resource checks and
+HR-reviewed mappings remain pending. Validation: 37 tests, typecheck and Prisma validation
+passed; lint has one existing warning. See [implementation evidence](docs/PHASE0.md).
+
 Original product brief
 ======================
 

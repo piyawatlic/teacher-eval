@@ -28,6 +28,7 @@ model User {
   lastName  String?
   username  String? @unique
 
+  /// Legacy Portal role; never implies an evaluation role.
   role   Role       @default(MEMBER)
   status UserStatus @default(ACTIVE)
 
@@ -58,6 +59,8 @@ model User {
 
   accounts       Account[]
   sessions       Session[]
+
+  evaluationRoles EvaluationRoleAssignment[]
 
   preferences    UserPreferences?
   deviceSessions DeviceSession[]
@@ -128,6 +131,26 @@ enum Role {
   MANAGER
   MEMBER
   VIEWER
+}
+
+/// Independent grants: users may be both TEACHER and COMMITTEE.
+enum EvaluationRole {
+  ADMIN
+  COMMITTEE
+  TEACHER
+}
+
+/// Additive ARCH-01 structure. No automatic backfill from User.role.
+/// Presence is a current grant; historical grants belong in the mapping/audit record.
+model EvaluationRoleAssignment {
+  userId    String
+  role      EvaluationRole
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@id([userId, role])
+  @@index([role])
 }
 
 enum UserStatus {

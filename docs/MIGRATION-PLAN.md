@@ -123,3 +123,28 @@ has no automatic down-migration. RPO/RTO and backup retention remain POL-11/13 d
 
 No live database inventory, migration, backup, restore or role conversion was performed by
 preparing this document.
+
+
+## ARCH-01 implementation increment — 2026-10-04
+
+The additive foundation is implemented in source:
+- `EvaluationRoleAssignment` links User to ADMIN/COMMITTEE/TEACHER with a composite primary
+  key preventing duplicate grants and a restrictive User foreign key. Legacy `User.role` is retained.
+- `lib/evaluation/permissions.ts` defines explicit entry capabilities with no role hierarchy,
+  wildcard ADMIN permission, or automatic legacy-role mapping.
+- `lib/auth/require-evaluation-capability.ts` reads current grants from the database after
+  `requireUser()`, requiring an active undeleted account and an unrevoked, unexpired device
+  session owned by that account. Missing device IDs fail closed on this new path.
+- Tests cover combined responsibilities, partial revocation, inactive/unmapped accounts,
+  legacy ADMIN isolation and the server guard's current-grant lookup.
+
+Migration `20261004000000_add_evaluation_role_assignments` is generated and reviewed, **not
+applied to a database**. It creates only the enum, relation, index and foreign key; it does
+not backfill grants or alter existing identity/role rows. SQL was generated from the committed
+and updated schemas without connecting to the runtime database. Deploy before using the guard.
+
+Existing Portal consumers continue to use legacy authorization. No evaluation page/action is
+wired yet; these capability checks are entry gates, not substitutes for future resource,
+assignment, workflow or conflict checks. Review/reopen/finalize permissions await policy approval.
+HR mapping, full consumer migration, database integration/constraint tests, restore rehearsal
+and Phase 1 UI/access acceptance remain outstanding.

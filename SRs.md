@@ -81,7 +81,8 @@ ADMIN ไม่ได้รับสิทธิ์ให้คะแนนแ�
 บัญชีเดิมที่ยังไม่ map ต้องไม่มีสิทธิ์งานประเมิน ไม่ fallback ไปใช้ legacy role
 เก็บโครงสร้างเดิมจน migration, acceptance และ rollback window สิ้นสุด
 ดู [แผนและกรณีตรวจรับ](docs/MIGRATION-PLAN.md) การตัดสินใจนี้เป็นทิศทางการออกแบบ
-ยังไม่มีการเปลี่ยน schema จริง และไม่แทนการอนุมัติบุคคลหรืออำนาจตาม POL-04/09/10
+เพิ่ม schema/migration ใน source แล้วตามข้อ 8.6 แต่ยังไม่ deploy หรือ map ผู้ใช้จริง
+และไม่แทนการอนุมัติบุคคลหรืออำนาจตาม POL-04/09/10
 
 ### 2.2 ผู้ใช้และกระบวนการหลัก
 
@@ -427,3 +428,22 @@ HR เป็นผู้ประสานการยืนยันจาก�
 ยังไม่ยืนยัน fresh install, production build, integration/browser E2E, SMTP จริง หรือ
 restore drill ในงานนี้ ทุก POL ยังรอคำตอบ ผู้อนุมัติ วันที่ และเอกสารอ้างอิงตามหมวด 6
 จึงยังไม่ปิดเกณฑ์ R0 และไม่รับรองความพร้อม production
+
+
+### 8.6 ARCH-01 — additive multi-role foundation (2026-10-04)
+
+เพิ่ม `EvaluationRole` และ `EvaluationRoleAssignment` ใน Prisma schema โดยเก็บ `User.role`
+เดิมไว้ มี composite primary key `(userId, role)` ป้องกันบทบาทซ้ำ และ foreign key ถึง User
+migration `20261004000000_add_evaluation_role_assignments` ยังไม่ deploy หรือ backfill
+
+`lib/evaluation/permissions.ts` ตรวจ capability จากหลายบทบาทโดยไม่มีลำดับสูงต่ำหรือ ADMIN
+wildcard; `lib/auth/require-evaluation-capability.ts` อ่าน grants ปัจจุบันจาก DB หลังตรวจ
+session และกำหนดให้เป็นบัญชี ACTIVE ไม่ถูกลบ พร้อม device session ของเจ้าของที่ไม่ถูก
+เพิกถอน/หมดอายุ บัญชีไม่มี grants ไม่ได้สิทธิ์จาก legacy role
+
+DR-01/NFR-01–02 มีโครงสร้างและ unit tests เพิ่มขึ้น แต่ยังไม่ตรวจรับครบ: ไม่มี evaluation
+routes หรือ resource/assignment/workflow guards และยังไม่มี database integration test
+การ map บุคคล การย้าย consumers ทั้งหมด และ HR approval ยังค้างตามแผน migration
+
+ผลตรวจ increment นี้: `pnpm test` 5 files / 37 tests ผ่าน, typecheck และ Prisma validate
+ผ่าน, lint ไม่มี error มี warning รูปภาพเดิม 1 รายการ ยังไม่ทดสอบ deploy migration จริง
