@@ -140,7 +140,7 @@ malformed, so a bad `.env` fails at boot rather than deep inside a query.
 | `POSTGRES_URL_NON_POOLING` | One required | Direct connection preferred by Prisma CLI commands when `DATABASE_URL` is unset |
 | `POSTGRES_URL` | One required | Fallback PostgreSQL connection string for app queries |
 | `AUTH_SECRET` | ✅ | `npx auth secret` |
-| `AUTH_URL` | — | Required in production; leave unset in development |
+| `AUTH_URL` | — | Set to the deployed HTTPS origin in production (not localhost); leave unset in development |
 | `AUTH_GOOGLE_ID` | — | Google provider registers only if this *and* the secret are set |
 | `AUTH_GOOGLE_SECRET` | — | |
 | `NEXT_PUBLIC_APP_NAME` | ✅ | Product name used throughout the UI |

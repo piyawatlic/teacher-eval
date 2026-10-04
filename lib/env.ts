@@ -17,7 +17,11 @@ const serverSchema = z.object({
   AUTH_SECRET: z
     .string()
     .min(1, "AUTH_SECRET is required — generate one with `npx auth secret`"),
-  AUTH_URL: z.url().optional(),
+  AUTH_URL: z.preprocess(
+    (value) =>
+      typeof value === "string" && value.trim() === "" ? undefined : value,
+    z.url().optional(),
+  ),
 
   // Optional: the Google provider is only registered when both are present.
   AUTH_GOOGLE_ID: z.string().optional(),
