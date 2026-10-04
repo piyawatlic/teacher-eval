@@ -18,6 +18,18 @@ SMTP, browser acceptance and restore rehearsal have not been verified in this Ph
 All HR decisions remain pending; example criteria and scores below are not approved policy.
 Phase 0 closes only against the exit gate in [ROADMAP.md](ROADMAP.md) and [SRS](SRs.md).
 
+Selected access architecture — ARCH-01 (2026-10-04)
+--------------------------------------------------
+
+Separate user identity from role assignments. A provisioned user can hold one or more roles,
+including TEACHER and COMMITTEE simultaneously, without combined role names. Authorization
+checks explicit capabilities together with ownership, assignments, account/workflow state and
+approved conflict rules; holding ADMIN does not automatically grant every evaluation permission.
+Introduce this additively, preserve existing identity and role data, map accounts only after HR
+review, update every role consumer, and retain the legacy structure through acceptance testing
+and the rollback window. See [migration design](docs/MIGRATION-PLAN.md). This is the selected
+architecture; HR authority and mapping approvals remain pending.
+
 Original product brief
 ======================
 

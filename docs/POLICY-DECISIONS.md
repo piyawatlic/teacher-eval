@@ -1,6 +1,6 @@
 # Phase 0 — HR decision register
 
-Status: **all decisions pending**. Source: [SRS §6](../SRs.md).
+Status: **HR policy approvals pending; multi-role architecture selected (ARCH-01)**. Source: [SRS §6](../SRs.md).
 No approver, approval date or official form has been supplied. Suggestions below are discussion
 inputs only; they must not become production defaults or seeded official criteria.
 
@@ -15,11 +15,21 @@ inputs only; they must not become production defaults or seeded official criteri
 | POL-07 | Define academic/Buddhist year convention, unique round identifier, timezone, inclusive date boundaries and late editing/submission. Asia/Bangkok is a proposal, not acceptance. | R2–4 | Pending |
 | POL-08 | Visibility matrix for draft/final scores, committee names and comments; teacher view, other committee members and exports | R4–6 | Pending |
 | POL-09 | Provisioning, public signup, Google admission/linking, username/email login, recovery channel, session duration and remember-me. Invitation-only is recommended for review. | R1 staff access | Pending |
-| POL-10 | Single/multiple roles, self-assessment/conflict of interest, external committee members and deactivation effect on drafts/submitted work | R1 role design / R3 assignments / R8 | Pending |
+| POL-10 | Multi-role architecture selected in ARCH-01; HR must confirm allowed combinations, self-assessment/conflict of interest, external committee members and deactivation effect on drafts/submitted work | R1 role design / R3 assignments / R8 | Pending |
 | POL-11 | Retention, backups, privacy notice, audit access, erasure/anonymization and incident owner. Legacy 30-day deletion/365-day audit guidance is not college policy. | R8 | Pending |
 | POL-12 | Approved Thai report specimen, headings, date wording, signatories, export columns, PDF delivery method and delivery phase; explicitly accept/reject browser print-to-PDF | R6 / FR-32 allocation | Pending |
 | POL-13 | Expected teacher/committee/round counts, concurrent load, response targets, browsers/devices, recovery time and recovery point targets | R8 | Pending |
 | POL-14 | Event-to-recipient matrix, read/dismiss behavior, overdue reminders and configurable report/permission/notification scope | R6–7 | Pending |
+
+## Recorded project direction — ARCH-01 (2026-10-04)
+
+Source: the project user's direction in this working session. Select multi-role assignments
+separate from identity, capability-based authorization, and additive migration retaining legacy
+role data through acceptance and the rollback window. See [design and acceptance cases](MIGRATION-PLAN.md#arch-01--multi-role-identity-and-capability-authorization).
+This resolves the schema direction within POL-10; it does not approve individual account
+mappings, allowed role combinations in practice, conflicts of interest or POL-04 authorities.
+Implementation owner: Phase 1 development; HR approval identity/date remain pending.
+Affected requirements: DR-01, NFR-01–03/11, FR-03 and SRS §2.3.
 
 ## Record a decision
 

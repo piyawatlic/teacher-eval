@@ -139,6 +139,9 @@ their role may access.
 
 - Replace the Portal/user-management product identity with the college and system identity from
   `PLAN.md`; implement the navy/blue, white, and restrained gold visual system and Thai font choice.
+- Use separate identity and multi-role assignments (ARCH-01), with explicit capability checks
+  plus ownership/assignment/workflow restrictions. Add the schema first, retain legacy role data
+  through HR-reviewed mapping, acceptance and the rollback window; never infer new grants.
 - Define and enforce the project roles: `ADMIN`/HR, `COMMITTEE`, and `TEACHER`. Add explicit
   permissions for committee assignment, evaluation, review, reopening, finalization, and result
   viewing.

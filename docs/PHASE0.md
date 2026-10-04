@@ -12,7 +12,7 @@ legacy Portal. Requirement IDs below refer to the root SRS unless explicitly mar
 |---|---|---|
 | Policy decision register | Prepared, awaiting HR | [POL-01–14 register](POLICY-DECISIONS.md); no example scoring values approved |
 | Existing-system inventory | Code review complete | Inventory below; runtime checks remain separate |
-| Role/data migration plan | Prepared, awaiting review | [Migration plan](MIGRATION-PLAN.md); no existing role inferred |
+| Role/data migration plan | Multi-role direction selected; mapping/rehearsal review pending | [Migration plan](MIGRATION-PLAN.md); no existing role inferred |
 | Reproducible unit baseline | Prepared | `vitest.config.mts`, `tests/setup.ts`; fixed test-only environment without `.env` |
 | Setup and migration procedures | Documented | Runbook below and README |
 | Phase 0 acceptance | Pending | HR decisions with source/approver/date, technical review of migration plan, clean-environment setup evidence |
@@ -20,6 +20,10 @@ legacy Portal. Requirement IDs below refer to the root SRS unless explicitly mar
 Preparing a register does not approve its contents. HR must record decisions or explicitly
 approved deferrals with an owner and a gate before Phase 0 is marked complete. Production
 release still requires R8 acceptance, including a restore drill and pilot.
+
+Project direction on 2026-10-04 selected multi-role assignments and capability-based access
+(ARCH-01 in the migration plan). POL-10 remains open for HR's role-combination, conflict and
+offboarding rules; this architectural choice is not an executed schema migration.
 
 ## Inventory and reuse assessment
 

@@ -9,7 +9,9 @@ References: root [SRS](../SRs.md) §2.1, DR-01–08, NFR-01–03/11 and
 Preserve User IDs, credential hashes, OAuth identities, audit references and existing account
 status. Never derive TEACHER from MEMBER/VIEWER, COMMITTEE from MANAGER, or evaluation approval
 power from ADMIN. The current single Role enum cannot represent simultaneous teacher/committee
-membership; resolve POL-10 before selecting a single-role or multi-role schema.
+membership. The project direction recorded on 2026-10-04 selects separate multi-role
+assignments and capability-based authorization (decision ARCH-01 below). HR still approves
+individual mappings and conflict/authority rules under POL-04/10.
 
 | Risk | Required treatment and evidence |
 |---|---|
@@ -23,6 +25,40 @@ membership; resolve POL-10 before selecting a single-role or multi-role schema.
 | Mutable profiles/rubrics alter old reports | Snapshot required identity/rubric/result data; approved correction creates a version, not silent replacement |
 | Workflow event missing after status update | Persist mandatory history in the same transaction as transition; retain separate best-effort operational audit |
 | Secret rotation during migration | Retain AUTH_SECRET and encryption labels; back up securely and verify TOTP/SMTP recovery without exposing secrets |
+
+## ARCH-01 — Multi-role identity and capability authorization
+
+Selected by project direction on 2026-10-04; implementation and HR access acceptance pending.
+
+- Keep `User` as the identity record. Introduce a separate role-assignment relation with a
+  foreign key to User and a unique `(userId, role)` constraint. A provisioned evaluation user
+  has one or more assignments; an unmapped legacy user has none and receives no evaluation access.
+- Use a closed vocabulary for ADMIN, COMMITTEE and TEACHER assignments. Do not introduce
+  combination roles such as TEACHER_COMMITTEE or infer a highest role. The exact Prisma model
+  names are implementation details to settle in Phase 1.
+- Resolve capabilities explicitly from active role assignments, then apply account status,
+  resource ownership, committee assignment, workflow state and approved conflict restrictions.
+  Having another role never bypasses these restrictions. No implicit ADMIN wildcard grants
+  scoring, approval or finalization authority; authority rules still require POL-04 acceptance.
+- Keep capabilities centrally defined and testable; a database-driven permission editor is not
+  required by this design decision. Navigation may reflect capabilities, but every server entry
+  point must enforce them independently.
+- Add the relation without dropping or rewriting `User.role` or its enum. Backfill only from the
+  HR-reviewed manifest. Keep legacy data through mapping, acceptance and the rollback window.
+- Define the authorization source per surface during transition: existing Portal surfaces use
+  legacy checks until migrated; evaluation surfaces use new assignments only. Never fall back to
+  legacy ranks when an evaluation capability is absent. Switch each consumer explicitly and
+  maintain a checklist so queries, actions, exports, APIs and navigation cannot be overlooked.
+- Freeze legacy role edits during cutover or reconcile them through an approved mapping process;
+  do not invent automatic dual-write mappings. Retaining a legacy column alone does not make an
+  old application safe to roll back after new role grants or revocations.
+
+Acceptance cases: a TEACHER + COMMITTEE user sees only their own published teacher results and
+can score only assigned eligible evaluations; no other teacher's results or unassigned work
+becomes accessible. Removing COMMITTEE preserves TEACHER access and blocks scoring on the next
+protected request. Duplicate assignments fail, unmapped users fail closed, and extra roles do
+not override suspension, submission locks or conflict restrictions. Self-assessment remains
+unavailable until an explicit POL-10 rule permits it.
 
 ## Preflight inventory (read-only, to run against an approved target)
 
@@ -42,8 +78,8 @@ manifest. An empty/new installation still needs a documented initial HR admin pr
 
 ## Ordered implementation and cutover
 
-1. Resolve POL-04/09/10 and approve the manifest and target role representation. Define capability
-   tests for ADMIN/HR, COMMITTEE and TEACHER; include mixed-role behavior if approved.
+1. Use the selected multi-role representation. Resolve remaining POL-04/09/10 rules and approve
+   the manifest. Define capability tests for ADMIN/HR, COMMITTEE, TEACHER and TEACHER + COMMITTEE.
 2. Implement additive migrations preserving existing identity contracts. Model unique staff IDs,
    account/profile ownership, round identity, assignment uniqueness, rubric versions, current
    evaluation uniqueness and history constraints in their delivery phases. Do not create empty
