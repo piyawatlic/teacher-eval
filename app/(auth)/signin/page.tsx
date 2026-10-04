@@ -10,17 +10,17 @@ import { AuthErrorToast } from "@/components/auth/AuthErrorToast";
 import { googleEnabled } from "@/lib/env";
 import { DEFAULT_SIGNED_IN_PATH } from "@/auth.config";
 
-export const metadata: Metadata = { title: "Sign in" };
+export const metadata: Metadata = { title: "เข้าสู่ระบบ" };
 
 /** Auth.js reports provider/callback failures by redirecting here with ?error. */
 const ERROR_MESSAGES: Record<string, string> = {
-  CredentialsSignin: "Incorrect email or password.",
+  CredentialsSignin: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
   OAuthAccountNotLinked:
-    "That email already has an account. Sign in with your password first, then link Google from account preferences.",
-  OAuthSignin: "Could not start the Google sign-in. Try again.",
-  OAuthCallback: "Google sign-in failed. Try again.",
-  AccessDenied: "You do not have access to this application.",
-  Configuration: "Authentication is misconfigured. Check the server logs.",
+    "อีเมลนี้มีบัญชีแล้ว กรุณาเข้าสู่ระบบด้วยรหัสผ่านก่อน แล้วเชื่อมต่อ Google ในการตั้งค่าบัญชี",
+  OAuthSignin: "ไม่สามารถเริ่มเข้าสู่ระบบด้วย Google กรุณาลองอีกครั้ง",
+  OAuthCallback: "เข้าสู่ระบบด้วย Google ไม่สำเร็จ กรุณาลองอีกครั้ง",
+  AccessDenied: "คุณไม่มีสิทธิ์เข้าถึงระบบนี้",
+  Configuration: "การตั้งค่าการเข้าสู่ระบบมีปัญหา กรุณาติดต่อผู้ดูแลระบบ",
 };
 
 function safePath(value: string | string[] | undefined): string {
@@ -38,14 +38,14 @@ export default async function SignInPage({
   const callbackUrl = safePath(params.callbackUrl);
   const errorKey = Array.isArray(params.error) ? params.error[0] : params.error;
   const errorMessage = errorKey
-    ? (ERROR_MESSAGES[errorKey] ?? "Could not sign you in. Try again.")
+    ? (ERROR_MESSAGES[errorKey] ?? "เข้าสู่ระบบไม่สำเร็จ กรุณาลองอีกครั้ง")
     : null;
 
   return (
     <AuthCard>
       <AuthHeading
-        title="Sign in"
-        description="Welcome back. Enter your details to continue."
+        title="เข้าสู่ระบบ"
+        description="กรอกอีเมลและรหัสผ่านเพื่อเข้าใช้งานระบบ"
       />
 
       {errorMessage && <AuthErrorToast message={errorMessage} />}

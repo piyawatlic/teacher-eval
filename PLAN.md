@@ -1034,3 +1034,18 @@ migration is performed by the build command.
 Validation: production build passed including the new route; 69 tests passed; typecheck passed;
 lint has one existing image warning. Browser visual acceptance and deployed Vercel verification
 remain pending. Other OVEC resources and evaluation workflows remain future increments.
+
+
+## Phase 1 Thai sign-in increment — 2026-10-04
+
+Added Noto Sans Thai (Thai/Latin subsets), Thai document language, navy/gold theme tokens,
+Thai sign-in labels, provider errors, validation and TOTP prompts. Shared authentication
+controls now have 44px minimum height. The authentication layout shows the college name via
+`NEXT_PUBLIC_INSTITUTION_NAME` (central default: วิทยาลัยการอาชีพลอง), separately from the
+existing runtime app name/logo. Existing branding values and TOTP issuer are preserved.
+
+This is partial localization: signup/recovery/account/dashboard/admin copy and navigation still
+need translation. College identity is currently deployment configuration, not a new runtime
+setting. Provisioning and HR role mappings remain pending; signup policy is unchanged.
+Production build including TypeScript and all 69 tests passed; lint retains one existing image
+warning. Browser/mobile visual acceptance and deployed verification remain pending.

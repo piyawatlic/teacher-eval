@@ -486,3 +486,15 @@ OVEC API ไม่เพิ่มสิทธิ์ประเมิน ไม�
 dependency cache แล้วไม่ได้รัน postinstall โดยไม่ deploy migration ระหว่าง build
 ตรวจ production build ผ่าน รวม route ใหม่; 69 tests และ typecheck ผ่าน; lint มี warning
 เดิม 1 รายการ ยังไม่ตรวจ browser visual acceptance หรือ deployment บน Vercel หลังแก้
+
+
+### 8.10 Thai sign-in foundation — 2026-10-04
+
+เพิ่ม Noto Sans Thai, document lang=th, สี navy/gold และแปลหน้าเข้าสู่ระบบรวม validation,
+provider error และ TOTP prompt เป็นไทย ปรับ control ของ auth ให้สูงอย่างน้อย 44px
+ชื่อวิทยาลัยอ่านจาก `NEXT_PUBLIC_INSTITUTION_NAME` โดยมี default กลาง ส่วนชื่อระบบ/โลโก้
+ยังอ่าน runtime settings เดิม ไม่มีการเปลี่ยน TOTP issuer หรือ provisioning policy
+
+NFR-04/05 และ FR-01 มีความคืบหน้าบางส่วน ยังต้องแปล signup/recovery/account/dashboard/admin
+และ navigation ให้ครบ รวมถึงตรวจ mobile/browser จริง college name ยังเป็น deployment config
+ไม่ใช่ runtime setting ใหม่ ตรวจ production build/TypeScript และ 69 tests ผ่าน; lint มี warning เดิม

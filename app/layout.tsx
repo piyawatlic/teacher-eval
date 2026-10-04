@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { Inter, Manrope, Source_Code_Pro } from "next/font/google";
+import { Noto_Sans_Thai, Source_Code_Pro } from "next/font/google";
 import { SearchProvider } from "@/components/search/SearchProvider";
 import { CommandPalette } from "@/components/search/CommandPalette";
 import { MobileNavProvider } from "@/components/layout/MobileNavProvider";
@@ -20,14 +20,10 @@ const THEME_INIT_SCRIPT = `
 })();
 `;
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
+const thai = Noto_Sans_Thai({
+  variable: "--font-noto-sans-thai",
+  subsets: ["thai", "latin"],
+  display: "swap",
 });
 
 const sourceCodePro = Source_Code_Pro({
@@ -46,15 +42,15 @@ export async function generateMetadata(): Promise<Metadata> {
       default: appName,
       template: `%s · ${appName}`,
     },
-    description: "Project dashboard",
+    description: "ระบบประเมินผลการปฏิบัติงานครู",
   };
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      className={`${inter.variable} ${manrope.variable} ${sourceCodePro.variable} h-full antialiased`}
+      lang="th"
+      className={`${thai.variable} ${sourceCodePro.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

@@ -21,15 +21,19 @@ const serverSchema = z.object({
     (value) => {
       if (typeof value !== "string") return value;
 
-      const trimmed = value.trim();
-      if (!trimmed) return undefined;
+      let normalized = value.trim();
+      if (!normalized) return undefined;
 
-      const unquoted = trimmed.replace(/^(['"])(.*)\1$/, "$2").trim();
-      return unquoted || undefined;
+      // Vercel's value field expects only the value, but people sometimes paste
+      // a dotenv assignment (`AUTH_URL="https://…"`) into it. Accept that
+      // common form while still validating the resulting absolute URL below.
+      normalized = normalized.replace(/^AUTH_URL\s*=\s*/i, "");
+      normalized = normalized.replace(/^(['"])(.*)\1$/, "$2").trim();
+      return normalized || undefined;
     },
     z.url({
       error:
-        "AUTH_URL must be an absolute URL (for example, https://portal.example.com); do not include the variable name or surrounding quotes",
+        "AUTH_URL must contain an absolute URL (for example, https://teacher-eval-omega.vercel.app)",
     }).optional(),
   ),
 

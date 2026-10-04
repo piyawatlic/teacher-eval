@@ -77,7 +77,7 @@ export function Field({
         inputMode={inputMode}
         maxLength={maxLength}
         aria-invalid={error ? true : undefined}
-        className={`h-[34px] w-full rounded-md border bg-hover px-3 text-[13px] font-medium text-foreground outline-none focus:border-border-emphasis ${
+        className={`min-h-11 w-full rounded-md border bg-hover px-3 text-[13px] font-medium text-foreground outline-none focus:border-border-emphasis ${
           error ? "border-danger/60" : "border-border-strong"
         }`}
       />
@@ -96,7 +96,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="flex h-[34px] w-full items-center justify-center rounded-md border border-[#16b674]/75 bg-[#72e3ad] px-2.5 text-[13px] font-medium text-[#030303] hover:bg-[#62d79f] disabled:opacity-60"
+      className="flex min-h-11 w-full items-center justify-center rounded-md border border-brand bg-brand px-2.5 text-[13px] font-medium text-brand-contrast hover:bg-brand-hover disabled:opacity-60"
     >
       {children}
     </button>
@@ -107,7 +107,7 @@ export function OrDivider() {
   return (
     <div className="flex w-full items-center gap-3">
       <span className="h-px flex-1 bg-hover" />
-      <span className="text-xs font-medium text-foreground-muted">or</span>
+      <span className="text-xs font-medium text-foreground-muted">หรือ</span>
       <span className="h-px flex-1 bg-hover" />
     </div>
   );

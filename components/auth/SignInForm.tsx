@@ -36,7 +36,7 @@ export function SignInForm({ callbackUrl }: { callbackUrl: string }) {
 
 
       <Field
-        label="Email"
+        label="อีเมล"
         name="email"
         type="email"
         autoComplete="email"
@@ -46,7 +46,7 @@ export function SignInForm({ callbackUrl }: { callbackUrl: string }) {
         error={state.fieldErrors?.email}
       />
       <Field
-        label="Password"
+        label="รหัสผ่าน"
         name="password"
         type="password"
         autoComplete="current-password"
@@ -59,7 +59,7 @@ export function SignInForm({ callbackUrl }: { callbackUrl: string }) {
         href="/forgot-password"
         className="-mt-2 self-end text-xs font-medium text-foreground-muted hover:text-foreground hover:underline"
       >
-        Forgot password?
+        ลืมรหัสผ่าน?
       </Link>
       {showCode && state.error && (
         <p
@@ -71,7 +71,7 @@ export function SignInForm({ callbackUrl }: { callbackUrl: string }) {
       )}
       {showCode && (
         <Field
-          label="Authentication code"
+          label="รหัสยืนยันตัวตน"
           name="code"
           type="text"
           inputMode="numeric"
@@ -83,13 +83,13 @@ export function SignInForm({ callbackUrl }: { callbackUrl: string }) {
       )}
 
       <SubmitButton pending={pending}>
-        {pending ? "Signing in..." : showCode ? "Verify" : "Sign in"}
+        {pending ? "กำลังเข้าสู่ระบบ…" : showCode ? "ยืนยันรหัส" : "เข้าสู่ระบบ"}
       </SubmitButton>
 
       <p className="text-center text-[13px] font-medium text-foreground-muted">
-        Don&apos;t have an account?{" "}
+        ยังไม่มีบัญชี?{" "}
         <Link href="/signup" className="text-foreground hover:underline">
-          Sign up
+          สมัครบัญชี
         </Link>
       </p>
     </form>

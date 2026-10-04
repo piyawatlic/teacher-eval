@@ -15,10 +15,10 @@ export function GoogleButton({ callbackUrl }: { callbackUrl: string }) {
     >
       <button
         type="submit"
-        className="flex h-[34px] w-full items-center justify-center gap-2 rounded-md border border-border-strong bg-background px-2.5 text-[13px] font-medium text-foreground hover:bg-hover"
+        className="flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-border-strong bg-background px-2.5 text-[13px] font-medium text-foreground hover:bg-hover"
       >
         <GoogleMark />
-        Continue with Google
+        ดำเนินการต่อด้วย Google
       </button>
     </form>
   );

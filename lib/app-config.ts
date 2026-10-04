@@ -15,3 +15,6 @@
  */
 export const appName = process.env.NEXT_PUBLIC_APP_NAME || "Portal";
 export const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "portal.local";
+
+/** College identity is separate from the runtime system display name. */
+export const institutionName = process.env.NEXT_PUBLIC_INSTITUTION_NAME || "วิทยาลัยการอาชีพลอง";

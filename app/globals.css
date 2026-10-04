@@ -2,6 +2,10 @@
 @plugin "@tailwindcss/typography";
 
 :root {
+  --brand: #173b70;
+  --brand-hover: #102d58;
+  --brand-contrast: #ffffff;
+  --accent: #b68b36;
   --background: #fdfdfd;
   --surface: #ffffff;
   --foreground: #030303;
@@ -22,6 +26,10 @@
 }
 
 [data-theme="dark"] {
+  --brand: #aacbff;
+  --brand-hover: #c6dcff;
+  --brand-contrast: #102443;
+  --accent: #d8b56b;
   --background: #121212;
   --surface: #1c1c1c;
   --foreground: #fdfdfd;
@@ -42,6 +50,10 @@
 }
 
 @theme inline {
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-contrast: var(--brand-contrast);
+  --color-accent: var(--accent);
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-foreground: var(--foreground);
@@ -59,8 +71,8 @@
   --color-danger-soft: var(--danger-soft);
   --color-pending: var(--pending);
   --color-pending-strong: var(--pending-strong);
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-manrope);
+  --font-sans: var(--font-noto-sans-thai);
+  --font-display: var(--font-noto-sans-thai);
   --font-mono: var(--font-source-code-pro);
 }
 

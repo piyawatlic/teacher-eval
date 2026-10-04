@@ -19,12 +19,12 @@ export type AuthFormState = {
 };
 
 const signInSchema = z.object({
-  email: z.email("Enter a valid email address"),
-  password: z.string().min(1, "Enter your password"),
+  email: z.email("กรุณากรอกอีเมลให้ถูกต้อง"),
+  password: z.string().min(1, "กรุณากรอกรหัสผ่าน"),
   code: z
     .string()
     .trim()
-    .regex(/^\d{6}$/, "Enter the 6-digit code")
+    .regex(/^\d{6}$/, "กรุณากรอกรหัสยืนยัน 6 หลัก")
     .optional(),
 });
 
@@ -84,18 +84,18 @@ export async function signInAction(
     // swallowing it would make every good login look like a failure.
     unstable_rethrow(error);
     if (error instanceof TooManySignInAttempts) {
-      return { error: "Too many sign-in attempts. Try again in a few minutes." };
+      return { error: "พยายามเข้าสู่ระบบหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่" };
     }
     if (error instanceof TwoFactorRequired) {
       return {
         needsCode: true,
         error: parsed.data.code
-          ? "Incorrect code. Try again."
-          : "Enter the 6-digit code from your authenticator app.",
+          ? "รหัสยืนยันไม่ถูกต้อง กรุณาลองอีกครั้ง"
+          : "กรุณากรอกรหัส 6 หลักจากแอปยืนยันตัวตน",
       };
     }
     if (error instanceof AuthError) {
-      return { error: "Incorrect email or password." };
+      return { error: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" };
     }
     throw error;
   }
