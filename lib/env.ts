@@ -33,6 +33,23 @@ const serverSchema = z.object({
     }).optional(),
   ),
 
+  // Optional master-data integration. Only the intended HTTPS origin receives the key.
+  OVEC_API_URL: z.preprocess(
+    (value) => value === "" ? undefined : value,
+    z.string().refine((value) => {
+      try {
+        const url = new URL(value);
+        return url.origin === "https://ovec-api.eleccom.in.th" &&
+          url.pathname === "/" && !url.search && !url.hash &&
+          !url.username && !url.password;
+      } catch { return false; }
+    }, "OVEC_API_URL must be the OVEC HTTPS origin without credentials, path or query").optional(),
+  ),
+  OVEC_API_KEY: z.preprocess(
+    (value) => value === "" ? undefined : value,
+    z.string().trim().min(1).optional(),
+  ),
+
   // Optional: the Google provider is only registered when both are present.
   AUTH_GOOGLE_ID: z.string().optional(),
   AUTH_GOOGLE_SECRET: z.string().optional(),

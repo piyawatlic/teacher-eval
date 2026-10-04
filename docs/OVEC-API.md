@@ -53,4 +53,24 @@ retain approved identifiers and immutable report snapshots when historical accur
 Upstream changes must not rewrite published reports. Master-data access does not approve a rubric:
 `standards` and `evaluation-issues` remain subject to HR policy confirmation before use as criteria.
 
-Connection and lookup are verified; an application client and UI consumers are not yet implemented.
+The server-only application client is implemented in `lib/ovec/client.ts`:
+
+- `getOvecCatalogue()` returns resource names and labels.
+- `listOvecColleges({ search, isActive, limit, offset, provinceId, orderBy, order })` returns a
+  validated page. Only `code`/`nameTh` ordering is currently exposed.
+- `getOvecCollege(code)` returns `id`, `code`, `nameTh`, nullable `nameEn` and `isActive`.
+- `OvecError.code` distinguishes missing configuration, unauthorized access, missing records,
+  rate limiting, unavailability and invalid responses. Input validation errors reject before fetch.
+
+Requests use a 10-second timeout, no-store caching and redirect rejection. Configuration is
+optional for application startup; requests require both variables. The server environment parser
+restricts the endpoint to the intended HTTPS origin. No upstream error body is returned or logged.
+The `server-only` marker prevents browser imports. UI/page/action callers must apply their own
+session/capability guards; this library does not expose a public proxy endpoint.
+
+Tests use mocked fetch and dummy credentials, never `.env` or the network. Validation on
+2026-10-04: 63 tests across 7 files passed; typecheck passed; lint has one existing image warning.
+UI consumers, general reference pickers and further resource-specific DTOs remain pending.
+
+Live smoke check through the implemented client also passed: `getOvecCollege("1354036401")`
+returned the expected active วิทยาลัยการอาชีพลอง record using the configured server key.

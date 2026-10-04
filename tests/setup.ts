@@ -15,6 +15,7 @@ for (const [name, value] of Object.entries(environment)) {
 }
 
 for (const name of [
+  "OVEC_API_URL", "OVEC_API_KEY",
   "POSTGRES_PRISMA_URL", "POSTGRES_URL", "POSTGRES_URL_NON_POOLING",
   "SHADOW_DATABASE_URL", "AUTH_URL", "AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET",
   "SMTP_HOST", "SMTP_PORT", "SMTP_FROM", "SMTP_USER", "SMTP_PASS",

@@ -1009,3 +1009,12 @@ The project now includes the OVEC master-data API as an authorized external refe
 Read-only authenticated catalogue and college-search calls returned HTTP 200; the college code
 is `1354036401`. See [OVEC integration notes](docs/OVEC-API.md) for the contract and boundaries.
 Application API client/UI integration remains pending; official scoring policy still requires HR.
+
+
+## OVEC client increment — 2026-10-04
+
+Implemented the server-only OVEC catalogue/college client, optional validated server config,
+minimal response DTOs, bounded query validation, timeout, redirect rejection and sanitized
+errors. Tests cover requests, bad inputs/configuration, failures and response validation.
+`pnpm test`: 63 tests passed; typecheck passed; lint has one existing warning.
+See [client usage](docs/OVEC-API.md). API-backed UI and other resource DTOs remain pending.

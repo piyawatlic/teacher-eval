@@ -463,3 +463,14 @@ routes หรือ resource/assignment/workflow guards และยังไม
 ตรวจ authenticated GET catalogue และค้นวิทยาลัยแล้ว HTTP 200 พบวิทยาลัยการอาชีพลอง
 รหัส `1354036401` เพียงรายการเดียว ดู [เอกสาร integration](docs/OVEC-API.md)
 ยังไม่มี application client/UI consumers; ไม่อ้างว่าเชื่อมหน้าจอสำเร็จแล้ว
+
+
+### 8.8 OVEC server client — 2026-10-04
+
+เพิ่ม `lib/ovec/client.ts` แบบ server-only สำหรับ catalogue, ค้นสถานศึกษาและอ่านตาม code
+ตรวจ config ฝั่ง server จำกัด HTTPS origin, query/pagination และ response DTO
+กำหนด timeout 10 วินาที ไม่ตาม redirect ไม่ cache และไม่เผย error body/key
+ยังไม่มี UI consumer หรือ public proxy; caller ต้องตรวจ session/capability ของหน้าที่ใช้
+
+ผลตรวจ: 7 files / 63 tests ผ่าน, typecheck ผ่าน, lint ไม่มี error มี warning เดิม 1 รายการ
+ดู [OVEC-API.md](docs/OVEC-API.md) สำหรับข้อจำกัดและวิธีใช้งาน
