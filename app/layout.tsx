@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Inter, Manrope, Source_Code_Pro } from "next/font/google";
 import { SearchProvider } from "@/components/search/SearchProvider";
 import { CommandPalette } from "@/components/search/CommandPalette";
@@ -38,6 +39,7 @@ const sourceCodePro = Source_Code_Pro({
 // runtime setting (ROADMAP 7.1) — a `const metadata` would freeze whatever
 // name was present when the module was first evaluated.
 export async function generateMetadata(): Promise<Metadata> {
+  await connection();
   const { appName } = await getAppSettings();
   return {
     title: {

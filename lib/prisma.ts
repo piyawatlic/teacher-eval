@@ -8,10 +8,18 @@ import { env } from "@/lib/env";
 // does not — it needs the schema passed explicitly, or every query targets
 // `public` while migrations went elsewhere.
 function createPrismaClient() {
-  const schema =
-    new URL(env.DATABASE_URL).searchParams.get("schema") ?? undefined;
+  const connectionUrl = new URL(env.DATABASE_URL);
+  const schema = connectionUrl.searchParams.get("schema") ?? undefined;
+
+  // pg-connection-string now treats sslmode=require as verify-full by default.
+  // Preserve libpq's require behavior for hosted URLs: encrypt the connection
+  // while allowing providers whose pooler certificate is not publicly trusted.
+  if (connectionUrl.searchParams.get("sslmode") === "require") {
+    connectionUrl.searchParams.set("uselibpqcompat", "true");
+  }
+
   const adapter = new PrismaPg(
-    { connectionString: env.DATABASE_URL },
+    { connectionString: connectionUrl.toString() },
     schema ? { schema } : undefined,
   );
   return new PrismaClient({

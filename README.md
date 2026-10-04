@@ -112,7 +112,10 @@ Add the database connection strings from your Supabase project to `.env`. The ap
 `POSTGRES_PRISMA_URL` for pooled runtime queries; Prisma CLI commands use
 `POSTGRES_URL_NON_POOLING` when available, which is the direct connection recommended for schema
 migrations. `DATABASE_URL`, when set, overrides both. If you only have one connection string, set
-`DATABASE_URL` to it.
+`DATABASE_URL` to it. Runtime connections preserve PostgreSQL/libpq's `sslmode=require` behavior:
+traffic is encrypted, but hostname verification is disabled, and the certificate chain is not
+verified unless `sslrootcert` is configured. Use a provider URL with a trusted CA and
+`sslmode=verify-full` when full certificate verification is required.
 
 For a new or existing database, deploy the checked-in migrations with:
 
