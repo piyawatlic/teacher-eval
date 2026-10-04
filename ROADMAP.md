@@ -14,6 +14,72 @@ infrastructure may be reusable, but its current user roles and administrative wo
 implement this project. Treat evaluation functionality below as **not started** until it exists and
 meets its exit criteria.
 
+### ตรวจสถานะจากโค้ด — 4 ตุลาคม 2569 (2026-10-04)
+
+สถานะด้านล่างตรวจจาก routes, components, Server Actions, queries, Prisma schema และ automated
+tests ใน working tree ปัจจุบัน ไม่ใช่การตรวจระบบที่ deploy หรือการทดสอบกับฐานข้อมูล/SMTP จริง
+ดูการเชื่อมโยงรหัสข้อกำหนดใน [SRS.md หมวด 8](./SRS.md#8-สถานะการพัฒนาที่ตรวจสอบจากโค้ด)
+
+**มีแล้วในฐาน Portal** หมายถึงพบเส้นทาง UI และโค้ดที่รองรับ; **มีบางส่วน** หมายถึงมีฐานเดิม
+แต่ยังไม่ครบข้อกำหนดระบบประเมิน; **ยังไม่เริ่ม** หมายถึงไม่พบโมดูลเป้าหมายในโค้ด
+ไม่มีเฟสระบบประเมินที่ตรวจรับครบแล้วในรอบการตรวจนี้
+
+| ฟังก์ชันที่มีแล้วในฐาน Portal | หลักฐาน | ข้อจำกัดเทียบระบบประเมิน |
+|---|---|---|
+| เข้าสู่ระบบด้วยอีเมล/รหัสผ่าน ออกจากระบบ และ Google OAuth แบบเลือกเปิด | `auth.ts`, `auth.config.ts`, `lib/actions/auth.ts`, `/signin` | ยังไม่รองรับ login ด้วย username; ยังมี public `/signup` |
+| สมัครบัญชีและบัญชีแรกเป็น ADMIN | `lib/bootstrap.ts`, `/signup` | ยังไม่ใช่นโยบาย provisioning ที่ HR อนุมัติสำหรับระบบบุคลากร |
+| บทบาทและ guard ฝั่งเซิร์ฟเวอร์ | `lib/permissions.ts`, `lib/auth/require-session.ts` | มี ADMIN/MANAGER/MEMBER/VIEWER; ไม่มี COMMITTEE/TEACHER หรือ assignment authorization |
+| จัดการผู้ใช้ ค้นหา/กรอง/แบ่งหน้า เชิญและส่งคำเชิญซ้ำ เปลี่ยนบทบาท ระงับ/เปิดใช้งาน รีเซ็ตรหัสผ่าน และ soft delete | `/users`, `lib/actions/users.ts`, `lib/queries/users.ts` | เป็นบัญชีผู้ใช้ ไม่ใช่ทะเบียนครู/กรรมการ; มี guard ห้ามจัดการตนเองและป้องกัน admin สุดท้าย |
+| รับคำเชิญ ตั้งรหัสผ่าน ยืนยันอีเมล และ forgot/reset password | `/invite/accept`, `/verify-email`, `/forgot-password`, `/reset-password` และ actions ที่เกี่ยวข้อง | การส่งอีเมลขึ้นกับ SMTP; ยังไม่ได้ตรวจส่งจริงในรอบนี้ |
+| โปรไฟล์ username เชื่อม/ยกเลิก Google เปลี่ยนรหัสผ่าน และตั้งรหัสผ่านสำหรับบัญชีไม่มี password | `/account/preferences`, `/account/security`, `/account/set-password`, `lib/actions/connections.ts` | ยังไม่มีฟิลด์ครู เช่น staff ID แผนก วิทยฐานะ และประเภทจ้าง |
+| TOTP 2FA: ลงทะเบียน ยืนยัน ปิด และ challenge ตอน sign-in | `lib/actions/twoFactor.ts`, `lib/auth/totp.ts`, `auth.ts` | ใช้กับ Credentials; Google sign-in ไม่ผ่าน TOTP challenge นี้ |
+| จำกัดการลองรหัสผ่านและ TOTP | `lib/auth/rate-limit.ts`, `auth.ts`, `lib/actions/twoFactor.ts` | ตัวนับในหน่วยความจำต่อ process; ยังไม่ใช่ distributed rate limiting |
+| รายการ device sessions และเพิกถอน session | `lib/actions/security.ts`, `lib/queries/account.ts`, `lib/auth/require-session.ts` | มี DB-backed revocation และปฏิเสธบัญชีระงับใน protected request |
+| ขอ/ยกเลิกลบบัญชีและ soft delete หลัง grace period | `lib/auth/deletion.ts`, `lib/actions/profile.ts` | ตรวจ expiry เมื่อมี request; ไม่มี scheduled cleanup job |
+| Personal API tokens พร้อม scopes/expiry/revocation และ bearer API | `/account/access-tokens`, `/api/me`, `lib/auth/api-token.ts` | scope ปัจจุบัน `identity:read`; ไม่ใช่ API งานประเมินหรือ API ภายนอกของวิทยาลัย |
+| Audit logs พร้อมตัวกรอง รายละเอียด cursor และ CSV export ตามสิทธิ์ | `/account/audit-logs`, `/account/audit-logs/export`, `lib/queries/audit.ts` | audit เป็น best-effort; CSV นี้ไม่ใช่รายงานคะแนน และยังไม่มี workflow history ของการประเมิน |
+| ชื่อแอปและโลโก้ตั้งค่า runtime | `/admin/branding`, `lib/actions/settings.ts`, `lib/queries/settings.ts` | ยังไม่มีชื่อวิทยาลัยแยกชื่อระบบหรือรายงานประเมิน; ไม่ได้ยืนยันค่า branding ใน DB |
+| ตั้ง SMTP แบบ preset/custom เก็บ secret เข้ารหัส และสั่งส่งอีเมลทดสอบ | `/admin/email`, `lib/actions/email-settings.ts`, `lib/email-config.ts` | มีโค้ดอ่าน config จาก DB/fallback env; ยังไม่ได้ทดสอบ SMTP จริง |
+| ส่ง feedback และ admin อ่าน feedback | `components/dashboard/FeedbackDialog.tsx`, `/admin/feedback` | ไม่ใช่ความคิดเห็นในแบบประเมิน |
+| Admin ประกาศข้อความและผู้ใช้ dismiss | `/admin/announcements`, `lib/actions/announcements.ts` | ไม่ใช่ notification inbox จาก assignment/submission/finalization |
+| Dashboard จำนวนบัญชีผู้ใช้และ recent audit activity | `/dashboard`, `DashboardStats`, `RecentActivity` | ยังไม่มีจำนวนครู ความคืบหน้ารอบ คะแนน หรือกราฟประเมิน |
+| Command palette ค้นหาผู้ใช้และ audit จาก DB พร้อมรายการ navigation | `lib/actions/search.ts`, `lib/queries/users.ts`, `lib/queries/audit.ts` | มี live search จริง แต่ยังค้นครู แผนก หรือกรรมการไม่ได้ |
+| Mobile drawer, theme light/dark/system และ toast mutation feedback | `components/layout/`, `components/theme/`, `app/layout.tsx` | UI หลักยังภาษาอังกฤษ (`lang="en"`) และฟอนต์ Latin; ยังไม่มีหน้าประเมินให้ตรวจ mobile scoring |
+
+**ยังไม่พบ:** departments, teacher profiles, committee profiles/groups, evaluation rounds,
+rubrics/result bands, assignments, draft scores, submission/reopen/review/finalization,
+teacher results, evaluation reports A4/PDF/Excel/CSV และ workflow notifications ทั้งใน
+`prisma/schema.prisma` และเส้นทาง `app/` ส่วน `prisma/seed.ts` รายงานจำนวนบัญชีเท่านั้น
+ยังไม่มีชุดข้อมูลสาธิตครู 8 คน/กรรมการ 5 คน/รอบปี 2569
+
+### สถานะรายเฟส
+
+| เฟส | สถานะ | งานที่มีและงานที่ยังขาด |
+|---|---|---|
+| 0 | มีบางส่วน | มี PLAN/ROADMAP/SRS ฉบับร่าง เอกสาร setup/migrations และ Vitest baseline; ยังไม่มีหลักฐาน HR อนุมัติ POL-01–14 หรือแผนย้ายบทบาท/ข้อมูลที่ตรวจรับแล้ว |
+| 1 | มีบางส่วน | มี auth/session/guards/navigation และ runtime branding เดิม; ยังขาดบทบาทระบบประเมิน ตัวตนภาษาไทย นโยบาย signup และ demo accounts |
+| 2 | ยังไม่เริ่ม | User CRUD เดิมไม่ใช่ครู แผนก กรรมการ หรือรอบประเมิน |
+| 3 | ยังไม่เริ่ม | ไม่มี rubric versions/result bands/assignments |
+| 4 | ยังไม่เริ่ม | ไม่มีแบบประเมิน คะแนน ร่าง การส่ง ล็อก หรือ reopen |
+| 5 | ยังไม่เริ่ม | Dashboard เดิมไม่มี monitoring/review/finalization ของการประเมิน |
+| 6 | ยังไม่เริ่ม | ไม่มีผลครูหรือรายงานประเมิน; audit CSV ไม่นับเป็น score export; PDF ยังรอจัดสรรเฟสตาม SRS FR-32/POL-12 |
+| 7 | มีบางส่วน | มี live search บัญชี/audit, drawer และ toast; ยังไม่มี evaluation search/notifications และ mobile evaluation acceptance |
+| 8 | มีบางส่วน | มีคำสั่งและ unit tests ของฐานเดิม; ยังไม่มีหลักฐาน production build, integration/E2E งานประเมิน, restore drill, pilot หรือ HR sign-off ในรอบตรวจนี้ |
+
+### หลักฐานการตรวจทางเทคนิค
+
+- Vitest: **3 files / 26 tests ผ่าน** ครอบคลุม permissions, TOTP และ rate-limit ของ Portal
+  (`lib/permissions.test.ts`, `lib/auth/totp.test.ts`, `lib/auth/rate-limit.test.ts`)
+- TypeScript: `tsc --noEmit` **ผ่าน**
+- ESLint: **0 errors / 1 warning** เรื่อง `<img>` ใน `components/account/TwoFactorSettings.tsx:46`
+- รันผ่าน binaries ที่ติดตั้งใน `node_modules/.bin/`; การเรียก `pnpm test/typecheck/lint`
+  ในรอบนี้ไม่คืนผลและถูกหยุด จึงไม่อ้างว่า pnpm scripts ได้ผ่านแล้ว
+- ยังไม่ได้รัน production build, browser E2E, ตรวจข้อมูล runtime, ตรวจ SMTP หรือ backup/restore
+  จึงไม่รับรอง production readiness จากผล unit tests และ static checks นี้
+
+ขั้นตอนถัดไปคือยืนยันนโยบายเฟส 0 โดยอ้าง POL ใน SRS แล้วเตรียมแผน roles/schema migration
+ก่อนเริ่มเฟส 1–2; ไม่เพิ่มคะแนนหรือเกณฑ์ทางการจากตัวอย่างโดยอัตโนมัติ
+
 `PLAN.md` is the product brief. Before implementing official scoring, HR must confirm the current
 approved evaluation form, score limits and weights, result bands, averaging policy, required
 comments, and who may see feedback. The example criteria and result bands in the plan are not
