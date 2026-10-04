@@ -1,3 +1,26 @@
+Phase 0 implementation status — 2026-10-04
+===========================================
+
+Phase 0 has started; HR acceptance remains pending. This product brief describes the target
+system. The application still runs the legacy Portal account-management foundation.
+
+Prepared deliverables:
+- [Foundation inventory, setup runbook and acceptance record](docs/PHASE0.md).
+- [HR policy decision register POL-01–14](docs/POLICY-DECISIONS.md), including official criteria,
+  aggregation, result bands, authorities, visibility, academic dates and Thai reports.
+- [Role/data migration and rollback plan](docs/MIGRATION-PLAN.md), requiring explicit approved
+  account mapping and preserving identity/history rather than inferring new roles.
+- An isolated Vitest environment in `tests/setup.ts`; unit tests no longer load local `.env` secrets.
+
+Verified with `pnpm test`, `pnpm typecheck` and `pnpm lint`: 3 test files / 26 tests passed, TypeScript passed, ESLint
+0 errors / 1 existing image warning. Fresh installation, production build, live DB migration,
+SMTP, browser acceptance and restore rehearsal have not been verified in this Phase 0 work.
+All HR decisions remain pending; example criteria and scores below are not approved policy.
+Phase 0 closes only against the exit gate in [ROADMAP.md](ROADMAP.md) and [SRS](SRs.md).
+
+Original product brief
+======================
+
 Create a modern, professional, responsive WEB APPLICATION for a Thai vocational college called:
 
 “ระบบประเมินผลการปฏิบัติงานครู”

@@ -1,4 +1,11 @@
-# Portal
+# Teacher Performance Evaluation System
+
+The teacher-evaluation project is in **Phase 0 preparation**. The running application is still
+the Portal account-management foundation described below. Start with the root [SRS](SRs.md),
+[roadmap](ROADMAP.md), and [Phase 0 record](docs/PHASE0.md). HR policy decisions and role/data
+migration approval remain pending.
+
+## Existing Portal foundation
 
 A self-hosted **user management application**. One screen for administering accounts, roles and
 access; one self-service area where every user manages their own profile, password, sessions and
@@ -62,12 +69,12 @@ instance.
 
 ## Quick start
 
-**Prerequisites:** Node.js and pnpm. Docker is only needed for the local database; you can use a
+**Prerequisites:** Node.js 22.13+ and pnpm 11.17.0 (pinned in `package.json`). Docker is only needed for the local database; you can use a
 Supabase Postgres database instead (see [Supabase setup](#supabase-postgres)).
 
 ```bash
 # 1. Install dependencies
-pnpm install
+pnpm install --frozen-lockfile
 
 # 2. Create your environment file
 cp .env.example .env
@@ -79,7 +86,7 @@ npx auth secret
 pnpm db:up
 
 # 5. Apply migrations
-pnpm db:migrate
+pnpm exec prisma migrate deploy
 
 # 6. Run the dev server
 pnpm dev
@@ -164,6 +171,7 @@ Client Component.
 | `pnpm dev` | Dev server (Turbopack) |
 | `pnpm build` / `pnpm start` | Production build / run it |
 | `pnpm lint` | ESLint (`eslint-config-next`, core-web-vitals + TypeScript) |
+| `pnpm test` | Vitest unit tests; no database or `.env` required |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm db:up` / `pnpm db:down` | Start / stop PostgreSQL + pgAdmin + Mailpit |
 | `pnpm db:migrate` | `prisma migrate dev` |
@@ -171,7 +179,9 @@ Client Component.
 | `pnpm db:seed` | Reports counts only — creates nothing |
 | `pnpm db:reset` | Drop, recreate and re-migrate |
 
-There is **no test suite configured**. See [`docs/ROADMAP.md`](docs/ROADMAP.md) Phase 5.
+Run `pnpm test` for the Vitest unit baseline (26 tests for legacy permissions, secret encryption,
+and rate limiting). Tests use isolated dummy configuration and do not load `.env`. See the
+[Phase 0 runbook](docs/PHASE0.md) for setup, limitations and migration practices.
 
 ---
 

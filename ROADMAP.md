@@ -108,6 +108,15 @@ official policy and must remain configurable.
 
 **Outcome:** agreed business rules and a safe base for the new application.
 
+**Started 2026-10-04; acceptance pending.** The [Phase 0 record](docs/PHASE0.md)
+contains the code inventory, reproducible test/setup instructions and exit checklist.
+The [HR decision register](docs/POLICY-DECISIONS.md) covers POL-01–14; all are pending.
+The [role/data migration plan](docs/MIGRATION-PLAN.md) is prepared for review, with
+explicit per-user mapping, rehearsal and rollback gates. Unit tests now use test-only
+configuration instead of loading local secrets. `pnpm test` (26 tests), `pnpm typecheck`
+and `pnpm lint` passed outside the sandbox (one existing lint warning); see the record
+for verification limits. No evaluation role conversion has been applied.
+
 - Confirm the official evaluation form and the meaning, minimum, maximum, and weighting of each
   criterion.
 - Decide how committee scores combine (initial recommendation: arithmetic average of submitted,
